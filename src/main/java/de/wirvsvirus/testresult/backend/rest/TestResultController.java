@@ -1,5 +1,6 @@
 package de.wirvsvirus.testresult.backend.rest;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.model.TestResult.Result;
+import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
+import de.wirvsvirus.testresult.backend.tools.SmsServiceSms4;
 
 @RestController
 @RequestMapping("/tests")
@@ -20,6 +23,8 @@ public class TestResultController {
 
 	@Autowired
 	private TestResultService testProcessService;
+	@Autowired
+	private TestResultPushService pushService;
 
 	@GetMapping("/{id}")
 	public Optional<TestResult> getTestResult(@PathVariable("id") String id) {
@@ -32,19 +37,10 @@ public class TestResultController {
 
 		// TODO save
 
-		executePush(testProcess);
+		pushService.executePush(testProcess);
 
 	}
 
-	private void executePush(TestResult testProcess) {
-		if (testProcess.getStatus() != Result.NEGATIVE) {
-			// only push for negative
-			return;
-		}
-		
-		
-		
 
-	}
 
 }

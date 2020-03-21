@@ -46,7 +46,10 @@ public class SmsServiceVonage {
 	private static final String NEGATIV_TEXT = "Wir freuen uns Ihnen mitteilen zu können, dass ihr COVID-19 Testergebnis negativ ist. Der Virus konnte bei Ihnen nicht festegestellt werden.";
 
 	public static void sendNegativeResultSms(String number) throws IOException {
-		Request request = new Request.Builder().url(buildUrl(number))
+		String url = buildUrl(number);
+		System.out.println(url);
+		
+		Request request = new Request.Builder().url(url)
 				.post(RequestBody.create(MediaType.parse(APPLICATION_TYPE), "")).build();
 
 		 okhttp3.Response response = httpClient.newCall(request).execute();
@@ -57,12 +60,13 @@ public class SmsServiceVonage {
 		// Get response headers
 		ResponseBody responseBody = response.body();
 
+		System.out.println(response.body().string());
 		Response r = mapper.readValue(response.body().string(), Response.class);
 		
-		if (!r.messages.get(0).status.equals("0"))
-			throw new IOException("Not successful sent sms " + responseBody.string());
-		// Get response body
-		System.out.println(response.body().string());
+		if (!r.messages.get(0).status.equals("0")) {
+			throw new IOException("Not successful sent sms :" + responseBody.string());
+		}//Get response body
+		
 	}
 
 	private static String buildUrl(String number) {
@@ -94,6 +98,12 @@ public class SmsServiceVonage {
 		    }
 		  ]
 		}
+		
+		    "message-count": "1",
+            "messages": [{
+                  "status": "4",
+                  "error-text": "Bad Credentials"
+    }]
 }*/
 
 	
@@ -104,18 +114,9 @@ public class SmsServiceVonage {
 		List<Message> messages;
 	}
 	@Data
+	
 	class Message{
-		String to;
-		@JsonProperty("message-id")
-		String messageId;
 		String status;
-		@JsonProperty("remaining-balance")
-		String remainingBalance;
-		@JsonProperty("message-price")
-		String messagePrice;
-		String network;
-		@JsonProperty("account-ref")
-		String accountRef;
 	}
 	
 }

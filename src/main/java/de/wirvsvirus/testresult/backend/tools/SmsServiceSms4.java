@@ -2,6 +2,8 @@ package de.wirvsvirus.testresult.backend.tools;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import lombok.experimental.UtilityClass;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -16,13 +18,14 @@ import okhttp3.ResponseBody;
  */
 public class SmsServiceSms4 {
 
-    private final static OkHttpClient httpClient = new OkHttpClient();
-	
+	private final static OkHttpClient httpClient = new OkHttpClient();
+
 	private static final String BASE_URL = "http://www.sms4.de/cgi-bin/sms_out.pl";
 	private static final String USER = "user";
 	private static final String USER_VALUE = "Riddy";
-	private static final String PSW = "psw";
-	private static final String PSW_VALUE = "3016";
+	private static final String PSW = "pwd";
+	@Value("${sms4.password}")
+	private static String PSW_VALUE;
 	private static final String KDNR = "kdnr";
 	private static final String KDNR_VALUE = "WE20161";
 	private static final String TO = "handynr";
@@ -34,10 +37,10 @@ public class SmsServiceSms4 {
 
 	public static void sendNegativeResultSms(String number) throws IOException {
 
-		String url = buildUrl(number);
+		String phonenumber = cleanupNumber(number);
+		String url = buildUrl(phonenumber);
 
 		Request request = new Request.Builder().url(url).build();
-
 
 		Call call = httpClient.newCall(request);
 		Response response = call.execute();
@@ -52,6 +55,12 @@ public class SmsServiceSms4 {
 			throw new IOException("Not successful sent sms " + responseBody.string());
 		// Get response body
 		System.out.println(response.body().string());
+	}
+
+	private static String cleanupNumber(String number) {
+		if (number.startsWith("0") || number.startsWith("+"))
+			return cleanupNumber(number.substring(1));
+		return number;
 	}
 
 	private static String buildUrl(String number) {
