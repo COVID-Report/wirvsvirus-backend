@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.model.TestResult.Result;
+import de.wirvsvirus.testresult.backend.service.SmsServiceSms4;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
-import de.wirvsvirus.testresult.backend.tools.SmsServiceSms4;
 
 @RestController
 @RequestMapping("/tests")
