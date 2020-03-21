@@ -10,6 +10,7 @@ import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.model.TestResult.Result;
 import de.wirvsvirus.testresult.backend.persistence.TestResultRepo;
 import de.wirvsvirus.testresult.backend.tools.SmsServiceSms4;
+import de.wirvsvirus.testresult.backend.tools.SmsServiceVonage;
 
 @Component
 public class TestResultPushService {
@@ -23,10 +24,9 @@ public class TestResultPushService {
 		String contact = testProcess.getContact();
 		if (contact.matches(MOBILE_PATTERN))
 			try {
-				SmsServiceSms4.sendNegativeResultSms(contact);
+				SmsServiceVonage.sendNegativeResultSms(contact);
 			} catch (IOException e) {
 				// ignore, they can still look up the result
 			}
 	}
-
 }
