@@ -11,28 +11,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
+import de.wirvsvirus.testresult.backend.model.TestResult.Result;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
 
 @RestController
 @RequestMapping("/tests")
 public class TestResultController {
 
-	
 	@Autowired
 	private TestResultService testProcessService;
-	
+
 	@GetMapping("/{id}")
-	public Optional<TestResult> getTestResult(@PathVariable("id")String id) {
+	public Optional<TestResult> getTestResult(@PathVariable("id") String id) {
 		return testProcessService.getTestResult(id);
-		
+
 	}
-	
+
 	@PostMapping("/{id}")
-	public void addTestResult(@RequestBody TestResult testProcess){
-		
-		//TODO save
-		//TODO execute push
-		
+	public void addTestResult(@RequestBody TestResult testProcess) {
+
+		// TODO save
+
+		executePush(testProcess);
+
 	}
-	
+
+	private void executePush(TestResult testProcess) {
+		if (testProcess.getStatus() != Result.NEGATIVE) {
+			// only push for negative
+			return;
+		}
+		
+		
+		
+
+	}
+
 }
