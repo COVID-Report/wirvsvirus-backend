@@ -9,11 +9,11 @@ import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.persistence.TestResultRepo;
 
 @Component
-public class TestProcessService {
+public class TestResultService {
 	@Autowired
 	private TestResultRepo testRepo;
 	
-	public Optional<TestResult> getTestProcess(String id) {
+	public Optional<TestResult> getTestResult(String id) {
 		
 		return testRepo.findById(id);
 	}

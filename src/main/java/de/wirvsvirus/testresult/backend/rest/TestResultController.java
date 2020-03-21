@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
-import de.wirvsvirus.testresult.backend.service.TestProcessService;
+import de.wirvsvirus.testresult.backend.service.TestResultService;
 
 @RestController
 @RequestMapping("/tests")
-public class TestProcessController {
+public class TestResultController {
 
 	
 	@Autowired
-	private TestProcessService testProcessService;
+	private TestResultService testProcessService;
 	
 	@GetMapping("/{id}")
 	public Optional<TestResult> getTestResult(@PathVariable("id")String id) {
-		return testProcessService.getTestProcess(id);
+		return testProcessService.getTestResult(id);
 		
 	}
 	
