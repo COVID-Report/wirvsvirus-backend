@@ -41,6 +41,12 @@
                 <artifactId>javax.mail</artifactId>
                 <version>1.6.2</version>
             </dependency>
+            
+            <dependency>
+	            <groupId>com.sendgrid</groupId>
+    	        <artifactId>sendgrid-java</artifactId>
+        	    <version>4.4.6</version>
+            </dependency>
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import de.wirvsvirus.testresult.backend.exceptions.MailSendingException;
 import de.wirvsvirus.testresult.backend.exceptions.SmsSendingException;
 import de.wirvsvirus.testresult.backend.model.PushMessage;
 import de.wirvsvirus.testresult.backend.model.TestResult;
@@ -50,7 +51,11 @@ public class TestResultPushService {
 			}
 		}else if(isValidEmailAddress(contact)) {
 			message.setContact(contact);
-			emailService.sendMail(message);
+			try {
+				emailService.sendMail(message);
+			} catch (MailSendingException e) {
+				log.debug("sending mail failed",e);
+			}
 		}
 	}
 	
