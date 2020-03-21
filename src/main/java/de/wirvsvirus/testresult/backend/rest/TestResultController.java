@@ -22,23 +22,22 @@ import de.wirvsvirus.testresult.backend.tools.SmsServiceSms4;
 public class TestResultController {
 
 	@Autowired
-	private TestResultService testProcessService;
+	private TestResultService testResultService;
 	@Autowired
 	private TestResultPushService pushService;
 
 	@GetMapping("/{id}")
 	public Optional<TestResult> getTestResult(@PathVariable("id") String id) {
-		return testProcessService.getTestResult(id);
+		return testResultService.getTestResult(id);
 
 	}
 
 	@PostMapping("/{id}")
-	public void addTestResult(@RequestBody TestResult testProcess) {
+	public void addTestResult(@PathVariable("id")String id,@RequestBody TestResult testResult){
+		testResult.setId(id);
+		testResultService.createTestProcess(testResult);
 
-		// TODO save
-
-		pushService.executePush(testProcess);
-
+		pushService.executePush(testResult);		
 	}
 
 
