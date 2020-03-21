@@ -36,10 +36,10 @@ public class SmsServiceVonage {
 
 	private static final String KEY = "api_key";
 	@Value("${vonage.api.key:cb4bc87e}")
-	private static String KEY_VALUE;
+	private String KEY_VALUE;
 	private static final String SECRET = "api_secret";
 	@Value("${vonage.api.secret}")
-	private static String SECRET_VALUE;
+	private String SECRET_VALUE;
 	private static final String TO = "to";
 	private static final String FROM = "from";
 	private static final String FROM_VALUE = "Krankenhaus";
