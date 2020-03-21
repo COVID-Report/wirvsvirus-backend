@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LocalDateConfig {
-	private DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+	private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 	@Bean
 	public  DateTimeFormatter getDateTimeFormatter() {
 		return formatter;

@@ -2,7 +2,8 @@ management:
   endpoint:
     health:
       enabled: true
+    info:      enabled: true
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,info
