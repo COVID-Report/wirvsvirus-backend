@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -22,6 +23,7 @@ import okhttp3.ResponseBody;
  *
  */
 @UtilityClass
+@Slf4j
 public class SmsServiceVonage {
 
 	private static final String APPLICATION_TYPE = "application/x-www-form-urlencoded";
@@ -47,7 +49,7 @@ public class SmsServiceVonage {
 
 	public static void sendNegativeResultSms(String number) throws IOException {
 		String url = buildUrl(number);
-		System.out.println(url);
+		log.info("url={}", url);
 		
 		Request request = new Request.Builder().url(url)
 				.post(RequestBody.create(MediaType.parse(APPLICATION_TYPE), "")).build();
@@ -60,7 +62,7 @@ public class SmsServiceVonage {
 		// Get response headers
 		ResponseBody responseBody = response.body();
 
-		System.out.println(response.body().string());
+		log.info("Sending successful, response body: {}", response.body().string());
 		Response r = mapper.readValue(response.body().string(), Response.class);
 		
 		if (!r.messages.get(0).status.equals("0")) {
