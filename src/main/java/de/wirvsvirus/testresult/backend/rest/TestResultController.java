@@ -37,7 +37,7 @@ public class TestResultController {
 		testResult.setId(id);
 		testResultService.createTestProcess(testResult);
 
-		pushService.executePush(testResult);		
+		pushService.executePush(testResult);
 	}
 
 
