@@ -19,8 +19,12 @@ public class TestResultService {
 	}
 	
 	public void createTestProcess(TestResult p) {
-		p.setContact(null);
-		testRepo.save(p);
+		
+		TestResult save = new TestResult();
+		save.setId(p.getId());
+		save.setName(p.getName());
+		save.setStatus(p.getStatus());
+		testRepo.save(save);
 	}
 
 
