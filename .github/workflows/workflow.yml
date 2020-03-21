@@ -28,4 +28,4 @@ jobs:
           uses: azure/webapps-deploy@v1
           with: 
             app-name: node-rn
-            publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+            publish-profile: ${{ secrets.azureWebPublishProfile }}
