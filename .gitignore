@@ -1,4 +1,5 @@
 src/main/resources/application-local.yaml
+logs/*
 .mvn
 HELP.md
 target/

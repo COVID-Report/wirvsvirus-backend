@@ -1,27 +1,25 @@
 package de.wirvsvirus.testresult.backend.service;
 
 import java.io.IOException;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.model.TestResult.Result;
-import de.wirvsvirus.testresult.backend.persistence.TestResultRepo;
-import de.wirvsvirus.testresult.backend.tools.SmsServiceSms4;
 import de.wirvsvirus.testresult.backend.tools.SmsServiceVonage;
 
 @Component
 public class TestResultPushService {
-	private final String MOBILE_PATTERN = "/^([+]\\d{2})?\\d{10}$/";
+	private final String MOBILE_PATTERN = "[+|0]\\d+";
+	private final String MOBILE_CLEANUP_PATTERN = "[^(\\d|+)]";
 
 	public void executePush(TestResult testProcess) {
-		if (testProcess.getStatus() != Result.NEGATIVE) {
+		if (testProcess.getStatus() != Result.NEGATIVE ||StringUtils.isEmpty(testProcess.getContact() )) {
 			// only push for negative
 			return;
 		}
-		String contact = testProcess.getContact();
+		String contact = testProcess.getContact().replaceAll(MOBILE_CLEANUP_PATTERN, "");
 		if (contact.matches(MOBILE_PATTERN))
 			try {
 				SmsServiceVonage.sendNegativeResultSms(contact);
