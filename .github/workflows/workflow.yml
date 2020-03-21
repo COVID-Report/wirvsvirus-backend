@@ -1,4 +1,7 @@
-name: Java CI with Maven
+# This workflow will build a Java project with Maven and push to azure
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: push to azure
 
 on:
   push:
