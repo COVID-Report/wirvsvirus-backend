@@ -26,9 +26,11 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-       
+    - name: move file
+      run: mv target/backend-*.jar app.jar
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v1
       with: 
+        package: app.jar
         app-name: wirvsvirus-backend
         publish-profile: ${{ secrets.azureWebPublishProfile }}
