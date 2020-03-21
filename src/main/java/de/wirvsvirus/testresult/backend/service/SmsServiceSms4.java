@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import de.wirvsvirus.testresult.backend.exceptions.SmsSendingException;
-import de.wirvsvirus.testresult.backend.model.SmsMessage;
+import de.wirvsvirus.testresult.backend.model.PushMessage;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -40,9 +40,9 @@ public class SmsServiceSms4 implements SmsServiceProvider{
 
 	private static final String TEXT = "text";
 
-	public void sendNegativeResultSms(SmsMessage message) throws SmsSendingException {
+	public void sendNegativeResultSms(PushMessage message) throws SmsSendingException {
 
-		message.setNumber(cleanupNumber(message.getNumber()));
+		message.setContact(cleanupNumber(message.getContact()));
 		String url = buildUrl(message);
 		Request request = new Request.Builder().url(url).build();
 		Call call = httpClient.newCall(request);
@@ -69,10 +69,10 @@ public class SmsServiceSms4 implements SmsServiceProvider{
 		return number;
 	}
 
-	private String buildUrl(SmsMessage message) {
+	private String buildUrl(PushMessage message) {
 		HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL).newBuilder();
 
-		urlBuilder.addQueryParameter(TO, message.getNumber());
+		urlBuilder.addQueryParameter(TO, message.getContact());
 		urlBuilder.addQueryParameter(USER, USER_VALUE);
 		urlBuilder.addQueryParameter(PSW, password);
 		urlBuilder.addQueryParameter(KDNR, KDNR_VALUE);

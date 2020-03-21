@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.wirvsvirus.testresult.backend.exceptions.SmsSendingException;
-import de.wirvsvirus.testresult.backend.model.SmsMessage;
+import de.wirvsvirus.testresult.backend.model.PushMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
@@ -51,7 +51,7 @@ public class SmsServiceVonage implements SmsServiceProvider{
 
 	private static final String TEXT = "text";
 
-	public void sendNegativeResultSms(SmsMessage message) throws SmsSendingException  {
+	public void sendNegativeResultSms(PushMessage message) throws SmsSendingException  {
 		String url = buildUrl(message);
 		log.info("url={}", url);
 		
@@ -74,12 +74,12 @@ public class SmsServiceVonage implements SmsServiceProvider{
 		}
 	}
 
-	private String buildUrl(SmsMessage message) {
+	private String buildUrl(PushMessage message) {
 		
 		log.info(apiKey);
 		HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL).newBuilder();
 
-		urlBuilder.addQueryParameter(TO, message.getNumber());
+		urlBuilder.addQueryParameter(TO, message.getContact());
 		urlBuilder.addQueryParameter(KEY, apiKey);
 		urlBuilder.addQueryParameter(SECRET, apiSecret);
 		urlBuilder.addQueryParameter(FROM, message.getFrom());
