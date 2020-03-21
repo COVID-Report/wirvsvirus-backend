@@ -1,16 +1,20 @@
 package de.wirvsvirus.testresult.backend.tools;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Data;
 import lombok.experimental.UtilityClass;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -23,6 +27,8 @@ public class SmsServiceVonage {
 	private static final String APPLICATION_TYPE = "application/x-www-form-urlencoded";
 
 	private final OkHttpClient httpClient = new OkHttpClient();
+	
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	private static final String BASE_URL = "https://rest.nexmo.com/sms/json";
 
@@ -43,7 +49,7 @@ public class SmsServiceVonage {
 		Request request = new Request.Builder().url(buildUrl(number))
 				.post(RequestBody.create(MediaType.parse(APPLICATION_TYPE), "")).build();
 
-		Response response = httpClient.newCall(request).execute();
+		 okhttp3.Response response = httpClient.newCall(request).execute();
 
 		if (!response.isSuccessful())
 			throw new IOException("Unexpected code " + response);
@@ -51,7 +57,9 @@ public class SmsServiceVonage {
 		// Get response headers
 		ResponseBody responseBody = response.body();
 
-		if (!responseBody.string().contains("\"status\": \"0\""))
+		Response r = mapper.readValue(response.body().string(), Response.class);
+		
+		if (!r.messages.get(0).status.equals("0"))
 			throw new IOException("Not successful sent sms " + responseBody.string());
 		// Get response body
 		System.out.println(response.body().string());
@@ -69,4 +77,45 @@ public class SmsServiceVonage {
 
 		return urlBuilder.build().toString();
 	}
+
+	
+	
+	/*{
+		  "message-count": "1",
+		  "messages": [
+		    {
+		      "to": "447700900000",
+		      "message-id": "0A0000000123ABCD1",
+		      "status": "0",
+		      "remaining-balance": "3.14159265",
+		      "message-price": "0.03330000",
+		      "network": "12345",
+		      "account-ref": "customer1234"
+		    }
+		  ]
+		}
+}*/
+
+	
+	@Data
+	class Response {
+		@JsonProperty("message-count")
+		String messageCount;
+		List<Message> messages;
+	}
+	@Data
+	class Message{
+		String to;
+		@JsonProperty("message-id")
+		String messageId;
+		String status;
+		@JsonProperty("remaining-balance")
+		String remainingBalance;
+		@JsonProperty("message-price")
+		String messagePrice;
+		String network;
+		@JsonProperty("account-ref")
+		String accountRef;
+	}
+	
 }
