@@ -23,20 +23,28 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		
+		
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok</artifactId>
+    		<scope>provided</scope>
+		</dependency>
+<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
 <dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>1.18.12</version>
-    <scope>provided</scope>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
 </dependency>
 
 		<dependency>
@@ -50,11 +58,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		 -->
 	</dependencies>
 
 	<build>
