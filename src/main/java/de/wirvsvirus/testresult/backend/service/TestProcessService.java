@@ -1,37 +1,27 @@
 package de.wirvsvirus.testresult.backend.service;
 
-import org.joda.time.LocalDate;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import de.wirvsvirus.testresult.backend.model.TestProcess;
-import de.wirvsvirus.testresult.backend.model.TestProcess.Result;
-import de.wirvsvirus.testresult.backend.persistence.TestProcessRepo;
+import de.wirvsvirus.testresult.backend.model.TestResult;
+import de.wirvsvirus.testresult.backend.persistence.TestResultRepo;
 
 @Component
 public class TestProcessService {
 	@Autowired
-	private TestProcessRepo testRepo;
+	private TestResultRepo testRepo;
 	
-	public TestProcess getTestProcess(String labName, String sampleId, LocalDate dateOfBirth) {
+	public Optional<TestResult> getTestProcess(String id) {
 		
-		return testRepo.findByLabNameAndSampleIdAndDateOfBirth(labName, sampleId, dateOfBirth.toString());
+		return testRepo.findById(id);
 	}
 	
-	public void createTestProcess(String labName, String sampleId, LocalDate dateOfBirth) {
-		TestProcess p = new TestProcess();
-		p.setDateOfBirth(dateOfBirth.toString());
-		p.setLabName(labName);
-		p.setSampleId(sampleId);
-		p.setStatus(Result.PENDING);
+	public void createTestProcess(TestResult p) {
+		p.setContact(null);
 		testRepo.save(p);
 	}
 
-	public void updateResultForProcess(String labName, String sampleId, Result result) {
-		TestProcess p = testRepo.findByLabNameAndSampleId(labName, sampleId);
-		p.setStatus(result);
-		testRepo.save(p);
-	}
-	
 
 }
