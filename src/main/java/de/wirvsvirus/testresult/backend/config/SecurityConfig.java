@@ -66,7 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/tests/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/tests/**").hasRole("POSTUSER")
 				.antMatchers(HttpMethod.DELETE, "/tests/**").hasRole("ADMIN")
-				.and().csrf().disable()
+				.and()
+				.cors().disable()
+				.csrf().disable()
 				.formLogin().disable();
 	}
 }
