@@ -1,6 +1,5 @@
 package de.wirvsvirus.testresult.backend.rest;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.model.TestResult;
-import de.wirvsvirus.testresult.backend.model.TestResult.Result;
-import de.wirvsvirus.testresult.backend.service.SmsServiceSms4;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
 
