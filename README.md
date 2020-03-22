@@ -23,6 +23,15 @@ Zusätzlich zu den oben genannten APIs soll der Service auch ermöglichen automa
 weitere Kanäle in Planung
 * Telefon (via automatisiertem Anruf)
 
+#### Workflow
+* Patient meldet sich beim medizinischen Personal an (mit Stammdaten und evtl. Kontaktdaten)
+* Patient erhält seine Probennummer (erstellt vom medizinischen Personal/Labor)
+* Test wird vom Labor durchgeführt und rückgemeldet
+* via hashing wird eine anonymisierte Id erstellt (enthält: Geburtsdatum, Name, Probennummer)
+* Testergebnis wird an den Service übermittelt (anonyme Id + Ergebnis + Kontaktinformation falls vorhanden)
+* Testergebnis wird unter anonymisierter Id gespeichert, falls Kontaktinformation vorhanden wird eine Nachricht gesendet
+* Testergebnis ist nun via Webseite abrufbar (unter Angabe von Geburtsdatum, Name, Probennummer)
+
 ### Deployment/Services
 * backend Service: MS Azure
 * database: MongoDB Cloud Atlas
