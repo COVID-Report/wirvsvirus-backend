@@ -10,8 +10,8 @@ public class TestResult {
 
 	String id;
 	Result status;
-	String name;
 	String contact;
+	boolean notified;
 	
 	public enum Result { POSITIVE, NEGATIVE, PENDING, NONE}
 	
