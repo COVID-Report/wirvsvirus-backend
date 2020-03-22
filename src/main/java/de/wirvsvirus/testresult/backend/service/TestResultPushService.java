@@ -38,9 +38,7 @@ public class TestResultPushService {
 		
 		String contact = StringUtils.trimWhitespace(testProcess.getContact());
 		
-		PushMessage message = new PushMessage();
-		message.setFrom(FROM_VALUE);
-		message.setText(NEGATIV_TEXT);
+		PushMessage message = createMessage();
 		
 		boolean pushDone=false;
 		
@@ -62,6 +60,13 @@ public class TestResultPushService {
 			}
 		}
 		return pushDone;
+	}
+
+	private PushMessage createMessage() {
+		PushMessage message = new PushMessage();
+		message.setFrom(FROM_VALUE);
+		message.setText(NEGATIV_TEXT);
+		return message;
 	}
 	
 	public static boolean isValidEmailAddress(String email) {

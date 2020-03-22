@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wirvsvirus.testresult.backend.exceptions.FalseInformedException;
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -32,8 +35,36 @@ public class TestResultController {
 	}
 
 	@PostMapping("/{id}")
-	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult) {
+	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult)
+			throws FalseInformedException {
 		testResult.setId(id);
+
+		Optional<TestResult> previousResultOptional = testResultService.getTestResult(id);
+		if (!previousResultOptional.isPresent()) {
+			return informNegatives(testResult);
+		} else {
+			
+			TestResult previousResult = previousResultOptional.get();
+			if(previousResult.getStatus() == testResult.getStatus() ) {
+				if( previousResult.isNotified()) {
+					return previousResult;
+				}else {
+					return informNegatives(testResult);		
+				}
+			}else {
+				throw new FalseInformedException(new ErrorResult(previousResult,"Patient wurde über Ergebnis NEGATIVE informiert!").toString());
+			}
+		}
+	}
+
+	@Data
+	@AllArgsConstructor
+	public class ErrorResult{
+		TestResult result;
+		String comment;
+	}
+	
+	private TestResult informNegatives(TestResult testResult) {
 		TestResult saveResult;
 		try {
 			testResult.setNotified(pushService.executePush(testResult));
