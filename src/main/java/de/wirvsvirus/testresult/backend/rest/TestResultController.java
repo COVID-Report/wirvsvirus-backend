@@ -1,5 +1,6 @@
 package de.wirvsvirus.testresult.backend.rest;
 
+import java.time.format.TextStyle;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wirvsvirus.testresult.backend.exceptions.FalseInformedException;
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
@@ -32,8 +34,28 @@ public class TestResultController {
 	}
 
 	@PostMapping("/{id}")
-	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult) {
+	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult)
+			throws FalseInformedException {
 		testResult.setId(id);
+
+		Optional<TestResult> previosResultOptional = testResultService.getTestResult(id);
+		if (!previosResultOptional.isPresent()) {
+			return informNegatives(testResult);
+		} else {
+			TestResult previosResult = previosResultOptional.get();
+			if (!previosResult.isNotified()) {
+				return informNegatives(testResult);
+			} else {
+				if (previosResult.getStatus() == testResult.getStatus()) {
+					return previosResult;
+				}
+				// FIXME: what to do if falsely informed that negative??
+				throw new FalseInformedException("Patient wurde über Ergebnis NEGATIVE informiert!");
+			}
+		}
+	}
+
+	private TestResult informNegatives(TestResult testResult) {
 		TestResult saveResult;
 		try {
 			testResult.setNotified(pushService.executePush(testResult));
