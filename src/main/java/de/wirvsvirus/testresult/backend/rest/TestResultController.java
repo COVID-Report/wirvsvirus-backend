@@ -1,6 +1,5 @@
 package de.wirvsvirus.testresult.backend.rest;
 
-import java.time.format.TextStyle;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,8 @@ import de.wirvsvirus.testresult.backend.exceptions.FalseInformedException;
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -38,23 +39,31 @@ public class TestResultController {
 			throws FalseInformedException {
 		testResult.setId(id);
 
-		Optional<TestResult> previosResultOptional = testResultService.getTestResult(id);
-		if (!previosResultOptional.isPresent()) {
+		Optional<TestResult> previousResultOptional = testResultService.getTestResult(id);
+		if (!previousResultOptional.isPresent()) {
 			return informNegatives(testResult);
 		} else {
-			TestResult previosResult = previosResultOptional.get();
-			if (!previosResult.isNotified()) {
-				return informNegatives(testResult);
-			} else {
-				if (previosResult.getStatus() == testResult.getStatus()) {
-					return previosResult;
+			
+			TestResult previousResult = previousResultOptional.get();
+			if(previousResult.getStatus() == testResult.getStatus() ) {
+				if( previousResult.isNotified()) {
+					return previousResult;
+				}else {
+					return informNegatives(testResult);		
 				}
-				// FIXME: what to do if falsely informed that negative??
-				throw new FalseInformedException("Patient wurde über Ergebnis NEGATIVE informiert!");
+			}else {
+				throw new FalseInformedException(new ErrorResult(previousResult,"Patient wurde über Ergebnis NEGATIVE informiert!").toString());
 			}
 		}
 	}
 
+	@Data
+	@AllArgsConstructor
+	public class ErrorResult{
+		TestResult result;
+		String comment;
+	}
+	
 	private TestResult informNegatives(TestResult testResult) {
 		TestResult saveResult;
 		try {
