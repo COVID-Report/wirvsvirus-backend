@@ -18,13 +18,13 @@ public class TestResultService {
 		return testRepo.findById(id);
 	}
 	
-	public void createTestProcess(TestResult p) {
+	public TestResult createTestProcess(TestResult p) {
 		
 		TestResult save = new TestResult();
 		save.setId(p.getId());
-		save.setName(p.getName());
+		save.setNotified(p.isNotified());
 		save.setStatus(p.getStatus());
-		testRepo.save(save);
+		return testRepo.save(save);
 	}
 
 

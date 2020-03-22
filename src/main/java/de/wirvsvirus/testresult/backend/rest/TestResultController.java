@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import de.wirvsvirus.testresult.backend.model.TestResult;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/tests")
+@Slf4j
 public class TestResultController {
 
 	@Autowired
@@ -30,13 +32,17 @@ public class TestResultController {
 	}
 
 	@PostMapping("/{id}")
-	public void addTestResult(@PathVariable("id")String id,@RequestBody TestResult testResult){
+	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult) {
 		testResult.setId(id);
-		testResultService.createTestProcess(testResult);
-
-		pushService.executePush(testResult);
+		TestResult saveResult;
+		try {
+			testResult.setNotified(pushService.executePush(testResult));
+		} catch (Exception ex) {
+			log.error("error during push", ex);
+		} finally {
+			saveResult = testResultService.createTestProcess(testResult);
+		}
+		return saveResult;
 	}
-
-
 
 }
