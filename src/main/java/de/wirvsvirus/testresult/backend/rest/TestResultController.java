@@ -43,7 +43,7 @@ public class TestResultController {
 		Optional<TestResult> previousResultOptional = testResultService.getTestResult(id);
 		if (!previousResultOptional.isPresent()) {
 			return informNegatives(testResult);
-		} else {			
+		} else {		
 			TestResult previousResult = previousResultOptional.get();
 			if(previousResult.getStatus() == testResult.getStatus() ) {
 				if( previousResult.isNotified()) {
