@@ -10,8 +10,8 @@ Benachrichtigung erhalten. Dies führt zu erheblichen Unsicherheiten bei den Pat
 ## Umsetzung
 
 ### Schnittstellen
-REST API zum Hinterlegen von anonymisierten Testergebnissen (nicht öffentlich, für medizinische Einrichtungen)
-REST API zum Erfragen von Testergebnissen (anonyme Nutzung durch Web UI)
+* REST API zum Hinterlegen von anonymisierten Testergebnissen (nicht öffentlich, für medizinische Einrichtungen)
+* REST API zum Erfragen von Testergebnissen (anonyme Nutzung durch Web UI)
 
 ### Funktionen
 Zusätzlich zu den oben genannten APIs soll der Service auch ermöglichen automatisiert Benachrichtigungen an die Patienten zu versenden
@@ -24,10 +24,10 @@ weitere Kanäle in Planung
 * Telefon (via automatisiertem Anruf)
 
 ### Deployment/Services
-backend Service: MS Azure
-database: MongoDB Cloud Atlas
-EMail: SendGrid
-SMS: SMS4, Vonage
+* backend Service: MS Azure
+* database: MongoDB Cloud Atlas
+* EMail: SendGrid
+* SMS: SMS4, Vonage
 
 ### Systemübersicht
 
