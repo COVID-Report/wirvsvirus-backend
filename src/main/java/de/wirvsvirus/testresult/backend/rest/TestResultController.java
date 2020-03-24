@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wirvsvirus.testresult.backend.exceptions.FalseInformedException;
-import de.wirvsvirus.testresult.backend.exceptions.NoDataException;
 import de.wirvsvirus.testresult.backend.model.TestResult;
+import de.wirvsvirus.testresult.backend.model.TestResult.Result;
 import de.wirvsvirus.testresult.backend.service.TestResultPushService;
 import de.wirvsvirus.testresult.backend.service.TestResultService;
 import lombok.AllArgsConstructor;
@@ -30,8 +30,8 @@ public class TestResultController {
 	private TestResultPushService pushService;
 
 	@GetMapping("/{id}")
-	public TestResult getTestResult(@PathVariable("id") String id) throws NoDataException {
-		return testResultService.getTestResult(id).orElseThrow(NoDataException::new);
+	public Optional<TestResult> getTestResult(@PathVariable("id") String id) {
+		return testResultService.getTestResult(id);
 
 	}
 
@@ -43,7 +43,7 @@ public class TestResultController {
 		Optional<TestResult> previousResultOptional = testResultService.getTestResult(id);
 		if (!previousResultOptional.isPresent()) {
 			return informNegatives(testResult);
-		} else {
+		} else {		
 			TestResult previousResult = previousResultOptional.get();
 			if(previousResult.getStatus() == testResult.getStatus() ) {
 				if( previousResult.isNotified()) {
@@ -51,7 +51,10 @@ public class TestResultController {
 				}else {
 					return informNegatives(testResult);		
 				}
-			}else {
+			}else if(previousResult.getStatus() == Result.PENDING){
+				return informNegatives(testResult);					
+			}
+			else {
 				throw new FalseInformedException(new ErrorResult(previousResult,"Patient wurde über Ergebnis NEGATIVE informiert!").toString());
 			}
 		}

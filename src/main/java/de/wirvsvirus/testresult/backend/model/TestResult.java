@@ -13,6 +13,6 @@ public class TestResult {
 	String contact;
 	boolean notified;
 	
-	public enum Result { POSITIVE, NEGATIVE, PENDING, NONE}
+	public enum Result { POSITIVE, NEGATIVE, PENDING}
 	
 }
