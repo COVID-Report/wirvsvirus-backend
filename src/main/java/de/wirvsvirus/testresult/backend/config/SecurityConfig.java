@@ -2,23 +2,21 @@ package de.wirvsvirus.testresult.backend.config;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import io.micrometer.core.instrument.util.StringUtils;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
+
+	private static final String TESTS = "/tests/**";
 
 	@Value("${post.user:}")
 	private String postUser;
@@ -68,18 +66,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// HTTP Basic authentication
 				.httpBasic()
 				.and().authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/tests/**").permitAll()
-				.antMatchers(HttpMethod.POST, "/tests/**").hasRole("POSTUSER")
-				.antMatchers(HttpMethod.DELETE, "/tests/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.GET, "/hashes").permitAll()
+				.antMatchers(HttpMethod.GET, TESTS).permitAll()
+				.antMatchers(HttpMethod.POST, TESTS).hasRole("POSTUSER")
+				.antMatchers(HttpMethod.DELETE, TESTS).hasRole("ADMIN")
 				.and()
-				.cors().and()
-				.csrf().disable()
+				.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
+				.csrf().and()
 				.formLogin().disable();
 	}
-	
-	@Bean
-	CorsConfigurationSource corsConfig() {
-	   return httpServletRequest -> new CorsConfiguration().applyPermitDefaultValues();
-	}
-	
+
 }
