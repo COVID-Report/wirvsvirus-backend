@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers(HttpMethod.DELETE, TESTS).hasRole("ADMIN")
 				.and()
 				.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
-				.csrf().and()
+				.csrf().disable()
 				.formLogin().disable();
 	}
 
