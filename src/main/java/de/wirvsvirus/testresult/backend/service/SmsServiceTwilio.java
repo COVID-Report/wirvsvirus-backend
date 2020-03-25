@@ -4,24 +4,36 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
-import de.wirvsvirus.testresult.backend.model.PushMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
+import de.wirvsvirus.testresult.backend.exceptions.SmsSendingException;
+import de.wirvsvirus.testresult.backend.model.PushMessage;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Profile("twilio")
+@Slf4j
 public class SmsServiceTwilio implements SmsServiceProvider {
 
-    private static final String ACCOUNT_SID = "AC280fe240b4af20dc7c4718ee34404b4e";
-    private static final String AUTH_TOKEN = "03738f34c8c12e70950a12f883bd91b5";
-    private static final String FROM = "+12058464551";
-    private static final String TO = "+491799966985";
+    @Value("$(twilio.accountSid)")
+    private String accountSid;
+    @Value("$(twilio.authToken)")
+    private String authToken;
+    @Value("$(twilio.phoneNumerFrom)")
+    private String phoneNumerFrom;
 
     public void sendNegativeResultSms(PushMessage message) throws SmsSendingException {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Twilio.init(accountSid, authToken);
 
         Message twilioMessage = Message
-                                // .creator(new PhoneNumber(message.getContact()),
-                                .creator(new PhoneNumber(TO),
-                                         new PhoneNumber(FROM),
+                                .creator(new PhoneNumber(message.getContact()),
+                                         new PhoneNumber(phoneNumerFrom),
                                          message.getText())
                                 .create();
+
+        log.info("Send message, response status={}", twilioMessage.getStatus());
     }
 
 }
