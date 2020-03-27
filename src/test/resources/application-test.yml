@@ -1,0 +1,6 @@
+post:
+  user: user
+  password: password
+admin:
+  user: admin
+  password: adminpassword

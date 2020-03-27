@@ -39,7 +39,7 @@ public class TestResultController {
 	public TestResult addTestResult(@PathVariable("id") String id, @RequestBody TestResult testResult)
 			throws FalseInformedException {
 		testResult.setId(id);
-
+//TODO logic should be moved to service
 		Optional<TestResult> previousResultOptional = testResultService.getTestResult(id);
 		if (!previousResultOptional.isPresent()) {
 			return informNegatives(testResult);
@@ -66,7 +66,7 @@ public class TestResultController {
 		TestResult result;
 		String comment;
 	}
-	
+	//TODO saving should not depend on notification, we also get updates on the status that do not trigger notification
 	private TestResult informNegatives(TestResult testResult) {
 		TestResult saveResult;
 		try {
