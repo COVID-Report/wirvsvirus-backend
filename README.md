@@ -49,3 +49,5 @@ weitere Kanäle in Planung
 * topics https://airtable.com/shrs71ccUVKyvLlUA/tbl6Br4W3IyPGk1jt/viw7AlEju6qFtXJqL?blocks=hide
 * https://github.com/DominikGri/wirvsvirus-testergebnis-ui
 
+# BuildInfo
+[![Coverage Status](https://coveralls.io/repos/github/HacksBugsAndRockAndRoll/wirvsvirus-backend/badge.svg?branch=master)](https://coveralls.io/github/HacksBugsAndRockAndRoll/wirvsvirus-backend?branch=master)
