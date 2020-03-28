@@ -39,7 +39,7 @@ public class TestResultPushServiceTest {
 		tr.setContact("mail@test.com");
 		tr.setStatus(Result.NEGATIVE);
 		boolean sentFlag = service.executePush(tr);
-		assertAll("push is done and flag indicates it", () -> assertTrue(sentFlag),
+		assertAll("email push is done and flag indicates it", () -> assertTrue(sentFlag),
 				() -> verify(emailService, times(1)).sendMail(any()),
 				() -> verify(smsService, never()).sendNegativeResultSms(any()));
 	}
@@ -55,7 +55,7 @@ public class TestResultPushServiceTest {
 		tr.setContact("mail@test.com");
 		tr.setStatus(nonNegative);
 		boolean sentFlag = service.executePush(tr);
-		assertAll("push is done and flag indicates it", () -> assertFalse(sentFlag),
+		assertAll("no push is done and flag indicates it", () -> assertFalse(sentFlag),
 				() -> verify(emailService, never()).sendMail(any()),
 				() -> verify(smsService, never()).sendNegativeResultSms(any()));
 	}
@@ -68,7 +68,7 @@ public class TestResultPushServiceTest {
 		tr.setContact(validNumber);
 		tr.setStatus(Result.NEGATIVE);
 		boolean sentFlag = service.executePush(tr);
-		assertAll("push is done and flag indicates it", () -> assertTrue(sentFlag),
+		assertAll("sms push is done and flag indicates it", () -> assertTrue(sentFlag),
 				() -> verify(emailService, never()).sendMail(any()),
 				() -> verify(smsService, times(1)).sendNegativeResultSms(any()));
 	}
@@ -84,7 +84,7 @@ public class TestResultPushServiceTest {
 		tr.setContact("017555");
 		tr.setStatus(nonNegative);
 		boolean sentFlag = service.executePush(tr);
-		assertAll("push is done and flag indicates it", () -> assertFalse(sentFlag),
+		assertAll("no push is done and flag indicates it", () -> assertFalse(sentFlag),
 				() -> verify(emailService, never()).sendMail(any()),
 				() -> verify(smsService, never()).sendNegativeResultSms(any()));
 	}
@@ -97,7 +97,7 @@ public class TestResultPushServiceTest {
 		tr.setContact(invalidContact);
 		tr.setStatus(Result.NEGATIVE);
 		boolean sentFlag = service.executePush(tr);
-		assertAll("push is done and flag indicates it", () -> assertFalse(sentFlag),
+		assertAll("no push is done and flag indicates it", () -> assertFalse(sentFlag),
 				() -> verify(emailService, never()).sendMail(any()),
 				() -> verify(smsService, never()).sendNegativeResultSms(any()));
 	}
