@@ -3,10 +3,7 @@
 
 name: Java CI with Maven
 
-on:
-  push:
-  pull_request:
-    branches: [ master ]
+on: ["push", "pull_request"]
 
 jobs:
   build:
@@ -26,4 +23,6 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean package jacoco:report coveralls:report --file pom.xml
+      env:
+        COVERALLS_TOKEN: ${{ secrets.coverallsToken }}

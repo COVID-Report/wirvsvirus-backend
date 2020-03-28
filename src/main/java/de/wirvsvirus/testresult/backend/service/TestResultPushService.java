@@ -1,8 +1,5 @@
 package de.wirvsvirus.testresult.backend.service;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -17,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class TestResultPushService {
-	private static final String MOBILE_PATTERN = "[+491|01]\\d+";
+	private static final String MOBILE_PATTERN = "^(\\+491|01|00491)\\d+";
 	private static final String MOBILE_CLEANUP_PATTERN = "[^(\\d|+)]";
+	
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 	
 	private static final String FROM_VALUE = "Krankenhaus";
 	private static final String NEGATIV_TEXT = "Wir freuen uns Ihnen mitteilen zu können, dass ihr COVID-19 Testergebnis negativ ist. Der Virus konnte bei Ihnen nicht festegestellt werden.";
@@ -42,7 +41,7 @@ public class TestResultPushService {
 		
 		boolean pushDone=false;
 		
-		if(isValidEmailAddress(contact)) {
+		if(contact.matches(EMAIL_REGEX)) {
 			message.setContact(contact);
 			try {
 				emailService.sendMail(message);
@@ -50,7 +49,7 @@ public class TestResultPushService {
 			} catch (MailSendingException e) {
 				log.debug("sending mail failed",e);
 			}
-		}else if (contact.replaceAll(MOBILE_CLEANUP_PATTERN, "").matches(MOBILE_PATTERN)) {
+		}else if (contact.replaceAll("\\s", "").matches(MOBILE_PATTERN)) {
 			try {
 				message.setContact(contact.replaceAll(MOBILE_CLEANUP_PATTERN, ""));
 				smsService.sendNegativeResultSms(message);
@@ -68,15 +67,4 @@ public class TestResultPushService {
 		message.setText(NEGATIV_TEXT);
 		return message;
 	}
-	
-	public static boolean isValidEmailAddress(String email) {
-		   boolean result = true;
-		   try {
-		      InternetAddress emailAddr = new InternetAddress(email);
-		      emailAddr.validate();
-		   } catch (AddressException ex) {
-		      result = false;
-		   }
-		   return result;
-		}
 }
