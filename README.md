@@ -50,4 +50,7 @@ weitere Kanäle in Planung
 * https://github.com/DominikGri/wirvsvirus-testergebnis-ui
 
 # BuildInfo
+![Java CI with Maven](https://github.com/WirVsVirus-1896/wirvsvirus-backend/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/HacksBugsAndRockAndRoll/wirvsvirus-backend/badge.svg?branch=master)](https://coveralls.io/github/HacksBugsAndRockAndRoll/wirvsvirus-backend?branch=master)
+![push to azure](https://github.com/WirVsVirus-1896/wirvsvirus-backend/workflows/push%20to%20azure/badge.svg)
+
